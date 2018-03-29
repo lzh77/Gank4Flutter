@@ -23,7 +23,7 @@ class MeiziImagePageState extends State<MeiziImagePage> {
         actions: <Widget>[
           new FlatButton(
             child: new Icon(Icons.file_download, color: Colors.white),
-            onPressed: download(widget.url),
+            onPressed: null,
           )
         ],
       ),
