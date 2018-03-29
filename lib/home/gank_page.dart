@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gank4flutter/adapter/base_adapter.dart';
 import 'package:gank4flutter/adapter/gank_data_adapter.dart';
 import 'package:gank4flutter/adapter/meizi_adapter.dart';
 import 'package:gank4flutter/http/api_service.dart';
@@ -33,7 +32,6 @@ class GankListState extends State<GankList> {
   bool complete = false;
   bool isActived = false;
   Text nodata;
-  BaseAdapter adapter;
 
   @override
   void initState() {
@@ -85,15 +83,16 @@ class GankListState extends State<GankList> {
         child: new CircularProgressIndicator(),
       );
     } else {
+      var gankAdapter = new GankDataAdapter();
+      var meiziAdapter = new MeiziAdapter();
       if (datas.isEmpty) {
         return new Center(
           child: nodata,
         );
       }
       if (widget.type == '福利') {
-        adapter = new MeiziAdapter();
         var widgets = datas.map((Map<String, dynamic> info) {
-          return adapter.convert(context, info);
+          return meiziAdapter.convert(context, info);
         });
         widgets = ListTile.divideTiles(context: context, tiles: widgets);
 
@@ -105,9 +104,12 @@ class GankListState extends State<GankList> {
           children: widgets.toList(),
         );
       } else {
-        adapter = new GankDataAdapter();
         var widgets = datas.map((Map<String, dynamic> info) {
-          return adapter.convert(context, info);
+          if (info['type'] == '福利') {
+            return meiziAdapter.convert(context, info);
+          } else {
+            return gankAdapter.convert(context, info);
+          }
         });
         widgets = ListTile.divideTiles(context: context, tiles: widgets);
 
