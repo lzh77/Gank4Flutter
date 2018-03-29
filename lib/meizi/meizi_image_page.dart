@@ -31,7 +31,6 @@ class MeiziImagePageState extends State<MeiziImagePage> {
         child: new Image.network('${widget.url}'),
       ),
     );
-    // TODO: implement build
   }
 
   download(String url) async {

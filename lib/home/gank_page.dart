@@ -31,11 +31,13 @@ class GankList extends StatefulWidget {
 class GankListState extends State<GankList> {
   List<Map<String, dynamic>> datas = new List();
   bool complete = false;
+  bool isActived = false;
   Text nodata;
   BaseAdapter adapter;
 
   @override
   void initState() {
+    isActived = true;
     nodata = new Text(
       '暂无数据',
       style: new TextStyle(
@@ -44,6 +46,19 @@ class GankListState extends State<GankList> {
       ),
     );
     loadData();
+  }
+
+  @override
+  void dispose() {
+    isActived = false;
+    print('dipose:${widget.type}');
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    print('build gank list state:${widget.type}');
+    return getBody();
   }
 
   loadData() {
@@ -55,13 +70,6 @@ class GankListState extends State<GankList> {
         complete = true;
       }
     });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    print('build gank list state:${widget.type}');
-
-    return getBody();
   }
 
   showLoading() {
@@ -111,8 +119,10 @@ class GankListState extends State<GankList> {
   buildAdapter(BuildContext context, Map<String, dynamic> info) {}
 
   setData(List<Map<String, dynamic>> results) {
-    setState(() {
-      this.datas = results;
-    });
+    if (this.isActived) {
+      setState(() {
+        this.datas = results;
+      });
+    }
   }
 }
