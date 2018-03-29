@@ -10,7 +10,6 @@ dependencies:
   cupertino_icons: ^0.1.0
   flutter_webview_plugin: ^0.1.4
   share: ^0.3.0
-  path_provider: ^0.3.0
 
 dev_dependencies:
   flutter_test:

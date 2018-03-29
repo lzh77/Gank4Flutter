@@ -1,13 +1,10 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
 
 class MeiziImagePage extends StatefulWidget {
+  String title;
   String url;
 
-  MeiziImagePage(this.url);
+  MeiziImagePage({Key key, this.title, this.url}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -20,33 +17,11 @@ class MeiziImagePageState extends State<MeiziImagePage> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        actions: <Widget>[
-          new FlatButton(
-            child: new Icon(Icons.file_download, color: Colors.white),
-            onPressed: null,
-          )
-        ],
+        title: new Text(widget.title),
       ),
       body: new Center(
         child: new Image.network('${widget.url}'),
       ),
     );
-  }
-
-  download(String url) async {
-    var httpClient = new HttpClient();
-    final dir = await getApplicationDocumentsDirectory();
-    try {
-      print('download url:$url');
-      var request = await httpClient.getUrl(Uri.parse(url));
-      var response = await request.close();
-      if (response.statusCode == HttpStatus.OK) {
-        var json = await response.transform(UTF8.decoder).join();
-      } else {
-        print('Error get:\nHttp status ${response.statusCode}');
-      }
-    } catch (exception) {
-      print('Failed getting IP address,exception:$exception');
-    }
   }
 }

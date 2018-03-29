@@ -13,13 +13,13 @@ class MeiziAdapter extends BaseAdapter {
         onTap: () {
           Navigator.push(context,
               new MaterialPageRoute(builder: (BuildContext context) {
-            return new MeiziImagePage(item['url']);
+            return new MeiziImagePage(
+              title: item['desc'],
+              url: item['url'],
+            );
           }));
         },
       ),
-//      child: new Center(
-//        child: new Image.network('${item['url']}'),
-//      ),
     );
   }
 }
