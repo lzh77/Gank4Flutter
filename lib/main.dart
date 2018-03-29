@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:gank4flutter/home/home_page.dart';
+import 'package:gank4flutter/about/about_page.dart';
 
 void main() {
   runApp(new MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  String url;
 
   // This widget is the root of your application.
   @override
@@ -17,6 +17,9 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: new HomePage(title: 'Gank.io'),
+      routes: <String, WidgetBuilder>{
+        '/about': (BuildContext context) => new AboutPage(),
+      },
     );
   }
 }

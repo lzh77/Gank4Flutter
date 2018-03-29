@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gank4flutter/home/gank_page.dart';
+import 'package:share/share.dart';
 
 final List<Tab> tabList = [
   const Tab(text: 'all'),
@@ -10,6 +11,7 @@ final List<Tab> tabList = [
   const Tab(text: '拓展资源'),
   const Tab(text: '休息视频'),
   const Tab(text: '瞎推荐'),
+  const Tab(text: '福利'),
 ];
 
 List<GankPage> pages = [
@@ -21,18 +23,8 @@ List<GankPage> pages = [
   new GankPage('拓展资源'),
   new GankPage('休息视频'),
   new GankPage('瞎推荐'),
+  new GankPage('福利'),
 ];
-
-//final List<GankList> gankList = [
-//  new GankList(type: 'all'),
-//  new GankList(type: 'Android'),
-//  new GankList(type: 'iOS'),
-//  new GankList(type: 'App'),
-//  new GankList(type: '前端'),
-//  new GankList(type: '拓展资源'),
-//  new GankList(type: '休息视频'),
-//  new GankList(type: '瞎推荐'),
-//];
 
 class HomePage extends StatefulWidget {
   String title;
@@ -78,7 +70,7 @@ class HomePageState extends State<HomePage>
                       value: 0,
                     ),
                     new PopupMenuItem(
-                      child: const Text('设置'),
+                      child: const Text('关于'),
                       value: 1,
                     ),
                   ],
@@ -97,7 +89,11 @@ class HomePageState extends State<HomePage>
   }
 
   void onMenuItemSelected(int i) {
-    if (i == 0) {}
-    if (i == 1) {}
+    if (i == 0) {
+      share('分享应用「Gank4Flutter」-https://github.com/lzh77/Gank4Flutter');
+    }
+    if (i == 1) {
+      Navigator.pushNamed(context, '/about');
+    }
   }
 }
