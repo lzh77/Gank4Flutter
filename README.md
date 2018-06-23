@@ -1,8 +1,9 @@
 # gank4flutter
 
-A new Flutter project.
+gank.io客户端，flutter版，只实现了最简单的功能
 
-## Getting Started
+## 截图
 
-For help getting started with Flutter, view our online
-[documentation](http://flutter.io/).
+![1](./art/1.jpg) ![2](./art/2.jpg)
+
+![3](./art/3.jpg) ![4](./art/4.jpg)
