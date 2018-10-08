@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gank4flutter/adapter/gank_data_adapter.dart';
 import 'package:gank4flutter/adapter/meizi_adapter.dart';
+import 'package:gank4flutter/data_model.dart';
 import 'package:gank4flutter/http/api_service.dart';
 
 final List<String> items = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J'];
@@ -28,7 +29,7 @@ class GankList extends StatefulWidget {
 }
 
 class GankListState extends State<GankList> {
-  List<Map<String, dynamic>> datas = new List();
+  List<GankInfo> datas = new List();
   bool complete = false;
   bool isActived = false;
   Text nodata;
@@ -60,9 +61,9 @@ class GankListState extends State<GankList> {
   }
 
   loadData() {
-    var apiservice = new ApiService();
+    ApiService service = new ApiService();
     String url = '/api/data/' + widget.type + '/30/1';
-    apiservice.doGet(url).then((gank) {
+    service.doGet(url).then((gank) {
       if (gank != null && gank.results.length > 0) {
         setData(gank.results);
         complete = true;
@@ -91,7 +92,7 @@ class GankListState extends State<GankList> {
         );
       }
       if (widget.type == '福利') {
-        var widgets = datas.map((Map<String, dynamic> info) {
+        var widgets = datas.map((GankInfo info) {
           return meiziAdapter.convert(context, info);
         });
         widgets = ListTile.divideTiles(context: context, tiles: widgets);
@@ -104,8 +105,8 @@ class GankListState extends State<GankList> {
           children: widgets.toList(),
         );
       } else {
-        var widgets = datas.map((Map<String, dynamic> info) {
-          if (info['type'] == '福利') {
+        var widgets = datas.map((GankInfo info) {
+          if (info.type == '福利') {
             return meiziAdapter.convert(context, info);
           } else {
             return gankAdapter.convert(context, info);
@@ -120,7 +121,7 @@ class GankListState extends State<GankList> {
 
   buildAdapter(BuildContext context, Map<String, dynamic> info) {}
 
-  setData(List<Map<String, dynamic>> results) {
+  setData(List<GankInfo> results) {
     if (this.isActived) {
       setState(() {
         this.datas = results;
