@@ -1,17 +1,18 @@
+import 'package:json_annotation/json_annotation.dart';
+part 'data_model.g.dart';
+
+@JsonSerializable()
 class Gank {
-  bool error;
-  List<Map<String, dynamic>> results;
+  @JsonKey()
+  final bool error;
+  @JsonKey()
+  final List<Map<String, dynamic>> results;
 
   Gank(this.error, this.results);
 
-  Gank.fromJson(Map<String, dynamic> json)
-      : error = json['error'],
-        results = json['results'];
+  factory Gank.fromJson(Map<String, dynamic> json) =>_$GankFromJson(json);
 
-  Map<String, dynamic> toJson() => {
-        'error': error,
-        'results': results,
-      };
+  Map<String, dynamic> toJson() => _$GankToJson(this);
 }
 
 class GankInfo {
@@ -40,7 +41,8 @@ class GankInfo {
         used = json['used'],
         who = json['who'];
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() =>
+      {
         '_id': _id,
         'createdAt': createdAt,
         'desc': desc,

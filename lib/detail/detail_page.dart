@@ -36,7 +36,7 @@ class DetailState extends State<DetailPage> {
           child: new Icon(Icons.share, color: Colors.white),
           onPressed: widget.url.isNotEmpty
               ? () {
-                  share('来自「Gank4Flutter」的分享:${widget.url}');
+                  Share.share('来自「Gank4Flutter」的分享:${widget.url}');
                   print('share complete');
                 }
               : null,

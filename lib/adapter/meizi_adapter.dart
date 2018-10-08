@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gank4flutter/adapter/base_adapter.dart';
 import 'package:gank4flutter/meizi/meizi_image_page.dart';
@@ -8,7 +9,7 @@ class MeiziAdapter extends BaseAdapter {
     return new Card(
       child: new GestureDetector(
         child: new Container(
-          child: new Image.network('${item['url']}'),
+          child: new Image(image: new CachedNetworkImageProvider(item['url'])),
         ),
         onTap: () {
           Navigator.push(context,

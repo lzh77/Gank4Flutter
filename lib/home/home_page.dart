@@ -90,7 +90,7 @@ class HomePageState extends State<HomePage>
 
   void onMenuItemSelected(int i) {
     if (i == 0) {
-      share('分享应用「Gank4Flutter」-https://github.com/lzh77/Gank4Flutter');
+      Share.share('分享应用「Gank4Flutter」-https://github.com/lzh77/Gank4Flutter');
     }
     if (i == 1) {
       Navigator.pushNamed(context, '/about');

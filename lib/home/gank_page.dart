@@ -61,7 +61,7 @@ class GankListState extends State<GankList> {
 
   loadData() {
     var apiservice = new ApiService();
-    String url = apiservice.apiHost + '/api/data/' + widget.type + '/30/1';
+    String url = '/api/data/' + widget.type + '/30/1';
     apiservice.doGet(url).then((gank) {
       if (gank != null && gank.results.length > 0) {
         setData(gank.results);

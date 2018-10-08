@@ -1,31 +1,31 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:gank4flutter/data_model.dart';
 
 class ApiService {
-  final String apiHost = 'http://gank.io';
-  var httpClient = new HttpClient();
+  Dio dio;
+
+  ApiService() {
+    dio = new Dio();
+    dio.options.baseUrl = "http://gank.io";
+    //option.responsetype
+    //默认json 省去了json.decode步骤
+  }
 
   Future<Gank> doGet(String url) async {
     Gank gank;
     try {
-      print('get url:$url');
-      var request = await httpClient.getUrl(Uri.parse(url));
-      var response = await request.close();
-      if (response.statusCode == HttpStatus.OK) {
-        var json = await response.transform(UTF8.decoder).join();
-        //print('raw json:$json');
-        Map dataMap = JSON.decode(json);
-        gank = new Gank.fromJson(dataMap);
+      Response response = await dio.get(url);
+      if (response.statusCode == HttpStatus.ok) {
+        gank = new Gank.fromJson(response.data);
       } else {
         print('Error get:\nHttp status ${response.statusCode}');
       }
-    } catch (exception) {
-      print('Failed getting IP address,exception:$exception');
+    } on DioError catch (e) {
+      print('dio request error, exception:$e');
     }
-
     return gank;
   }
 }
