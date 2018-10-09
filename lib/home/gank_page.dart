@@ -1,131 +1,90 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_flux/flutter_flux.dart';
 import 'package:gank4flutter/adapter/gank_data_adapter.dart';
 import 'package:gank4flutter/adapter/meizi_adapter.dart';
 import 'package:gank4flutter/data_model.dart';
-import 'package:gank4flutter/http/api_service.dart';
+import 'package:gank4flutter/adapter/gank_stores.dart';
 
-final List<String> items = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J'];
-
-class GankPage extends StatelessWidget {
+class GankPage extends StatefulWidget {
   String type;
 
   GankPage(this.type);
 
   @override
-  Widget build(BuildContext context) {
-    return new GankList(type: type);
+  GankPageState createState() {
+    return GankPageState();
   }
 }
 
-class GankList extends StatefulWidget {
+class GankPageState extends State<GankPage> {
+  @override
+  Widget build(BuildContext context) {
+    return GankList(type: widget.type);
+  }
+}
+
+class GankList extends StoreWatcher {
   String type;
+  StoreToken gankStoreToken;
+  bool finish = false;
 
   GankList({Key k, this.type}) : super(key: k);
 
   @override
-  State<StatefulWidget> createState() {
-    return new GankListState();
-  }
-}
-
-class GankListState extends State<GankList> {
-  List<GankInfo> datas = new List();
-  bool complete = false;
-  bool isActived = false;
-  Text nodata;
-
-  @override
-  void initState() {
-    isActived = true;
-    nodata = new Text(
-      '暂无数据',
-      style: new TextStyle(
-        fontSize: 20.0,
-        fontWeight: FontWeight.w500,
-      ),
-    );
-    loadData();
-  }
-
-  @override
-  void dispose() {
-    isActived = false;
-    print('dipose:${widget.type}');
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    print('build gank list state:${widget.type}');
-    return getBody();
-  }
-
-  loadData() {
-    ApiService service = new ApiService();
-    String url = '/api/data/' + widget.type + '/30/1';
-    service.doGet(url).then((gank) {
-      if (gank != null && gank.results.length > 0) {
-        setData(gank.results);
-        complete = true;
-      }
-    });
-  }
-
-  showLoading() {
-    if (!complete) {
-      return true;
+  Widget build(BuildContext context, Map<StoreToken, Store> stores) {
+    GankStore store = stores[gankStoreToken];
+    if (store != null) {
+      this.finish = store.finish;
     }
-    return false;
-  }
-
-  getBody() {
-    if (showLoading()) {
-      return new Center(
-        child: new CircularProgressIndicator(),
-      );
+    if (!finish) {
+      return Center(child: CircularProgressIndicator());
     } else {
-      var gankAdapter = new GankDataAdapter();
-      var meiziAdapter = new MeiziAdapter();
-      if (datas.isEmpty) {
-        return new Center(
-          child: nodata,
-        );
-      }
-      if (widget.type == '福利') {
-        var widgets = datas.map((GankInfo info) {
-          return meiziAdapter.convert(context, info);
-        });
-        widgets = ListTile.divideTiles(context: context, tiles: widgets);
-
-        return new GridView.count(
-          crossAxisCount: 2,
-          primary: false,
-          padding: const EdgeInsets.all(8.0),
-          crossAxisSpacing: 8.0,
-          children: widgets.toList(),
+      Gank gank = store.gank;
+      if (gank == null || gank.results.isEmpty) {
+        return Center(
+          child: Text(
+            '暂无数据',
+            style: TextStyle(
+              fontSize: 20.0,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
         );
       } else {
-        var widgets = datas.map((GankInfo info) {
-          if (info.type == '福利') {
-            return meiziAdapter.convert(context, info);
-          } else {
-            return gankAdapter.convert(context, info);
-          }
-        });
-        widgets = ListTile.divideTiles(context: context, tiles: widgets);
+        if (this.type == "福利") {
+          var widgets = gank.results.map((GankInfo info) {
+            return MeiziAdapter().convert(context, info);
+          });
+          widgets = ListTile.divideTiles(context: context, tiles: widgets);
 
-        return new ListView(children: widgets.toList());
+          return GridView.count(
+            crossAxisCount: 2,
+            primary: false,
+            padding: const EdgeInsets.all(8.0),
+            crossAxisSpacing: 8.0,
+            children: widgets.toList(),
+          );
+        } else {
+          var widgets = gank.results.map((GankInfo info) {
+            if (info.type == '福利') {
+              return MeiziAdapter().convert(context, info);
+            } else {
+              return GankDataAdapter().convert(context, info);
+            }
+          });
+          widgets = ListTile.divideTiles(context: context, tiles: widgets);
+
+          return ListView(children: widgets.toList());
+        }
       }
     }
   }
 
-  buildAdapter(BuildContext context, Map<String, dynamic> info) {}
-
-  setData(List<GankInfo> results) {
-    if (this.isActived) {
-      setState(() {
-        this.datas = results;
-      });
-    }
+  @override
+  void initStores(ListenToStore listenToStore) {
+    //todo 使用构造函数里面的type 导致重复请求
+    gankStoreToken = StoreToken(GankStore(this.type));
+    listenToStore(gankStoreToken);
+    gankAction.call();
   }
 }

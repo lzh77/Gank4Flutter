@@ -8,19 +8,19 @@ class MeiziImagePage extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return new MeiziImagePageState();
+    return MeiziImagePageState();
   }
 }
 
 class MeiziImagePageState extends State<MeiziImagePage> {
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
-        title: new Text(widget.title),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
       ),
-      body: new Center(
-        child: new Image.network('${widget.url}'),
+      body: Center(
+        child: Image.network('${widget.url}'),
       ),
     );
   }

@@ -15,15 +15,15 @@ final List<Tab> tabList = [
 ];
 
 List<GankPage> pages = [
-  new GankPage('all'),
-  new GankPage('Android'),
-  new GankPage('iOS'),
-  new GankPage('App'),
-  new GankPage('前端'),
-  new GankPage('拓展资源'),
-  new GankPage('休息视频'),
-  new GankPage('瞎推荐'),
-  new GankPage('福利'),
+  GankPage('all'),
+  GankPage('Android'),
+  GankPage('iOS'),
+  GankPage('App'),
+  GankPage('前端'),
+  GankPage('拓展资源'),
+  GankPage('休息视频'),
+  GankPage('瞎推荐'),
+  GankPage('福利'),
 ];
 
 class HomePage extends StatefulWidget {
@@ -33,7 +33,7 @@ class HomePage extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return new HomePageState();
+    return HomePageState();
   }
 }
 
@@ -45,7 +45,7 @@ class HomePageState extends State<HomePage>
   @override
   void initState() {
     super.initState();
-    controller = new TabController(length: tabList.length, vsync: this);
+    controller = TabController(length: tabList.length, vsync: this);
   }
 
   @override
@@ -56,32 +56,32 @@ class HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
-          title: new Text(widget.title),
+    return Scaffold(
+      appBar: AppBar(
+          title: Text(widget.title),
           actions: <Widget>[
-            new PopupMenuButton<int>(
+            PopupMenuButton<int>(
               onSelected: (int i) {
                 setState(() => onMenuItemSelected(i));
               },
               itemBuilder: (BuildContext context) => <PopupMenuItem<int>>[
-                    new PopupMenuItem(
+                    PopupMenuItem(
                       child: const Text('分享'),
                       value: 0,
                     ),
-                    new PopupMenuItem(
+                    PopupMenuItem(
                       child: const Text('关于'),
                       value: 1,
                     ),
                   ],
             ),
           ],
-          bottom: new TabBar(
+          bottom: TabBar(
             tabs: tabList,
             controller: controller,
             isScrollable: true,
           )),
-      body: new TabBarView(
+      body: TabBarView(
         children: pages,
         controller: controller,
       ),

@@ -10,17 +10,17 @@ class DetailPage extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return new DetailState();
+    return DetailState();
   }
 }
 
 class DetailState extends State<DetailPage> {
-  final webviewPlugin = new FlutterWebviewPlugin();
+  final webviewPlugin = FlutterWebviewPlugin();
   AppBar appBar;
 
   @override
   Widget build(BuildContext context) {
-    return new WebviewScaffold(
+    return WebviewScaffold(
       url: widget.url,
       appBar: this.appBar,
     );
@@ -29,11 +29,11 @@ class DetailState extends State<DetailPage> {
   @override
   void initState() {
     super.initState();
-    appBar = new AppBar(
-      title: new Text(widget.title),
+    appBar = AppBar(
+      title: Text(widget.title),
       actions: <Widget>[
-        new FlatButton(
-          child: new Icon(Icons.share, color: Colors.white),
+        FlatButton(
+          child: Icon(Icons.share, color: Colors.white),
           onPressed: widget.url.isNotEmpty
               ? () {
                   Share.share('来自「Gank4Flutter」的分享:${widget.url}');
